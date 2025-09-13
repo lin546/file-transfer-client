@@ -10,7 +10,7 @@ function createWindow() {
         }
     })
     // 并且为你的应用加载index.html
-   win.loadFile('static/login.html')
+   win.loadFile('login.html')
 }
 
 app.whenReady().then(createWindow)

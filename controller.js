@@ -1,8 +1,12 @@
+
 var express = require('express');
 var ejs = require("ejs");
 var net = require('net');
 var fs = require("fs");
+const path = require('path');
 var app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 var mysql = require('mysql');
 
