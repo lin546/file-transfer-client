@@ -5,6 +5,7 @@
   "main": "main.js",
   "author": "",
   "scripts": {
+    "prepare": "node ./static/controller.js",
     "start": "electron ."
   },
   "license": "ISC",
