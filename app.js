@@ -5,9 +5,10 @@ var net = require('net');
 var fs = require("fs");
 const path = require('path');
 var app = express();
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+app.engine('html', ejs.__express);
 var mysql = require('mysql');
 
 const socket = new net.Socket();
@@ -56,7 +57,7 @@ app.get('/register', function (req, res) {
     var user = { uname: name, pwd: pwd };
     connection.query('insert into user set ?', user, function (err, rs) {
         if (err) throw err;
-        res.sendfile(__dirname + "/" + "login.html");
+        res.sendfile(__dirname + '/views/login.html');
     })
 })
 
@@ -74,7 +75,7 @@ app.get('/login', function (req, res) {
         console.log(rs);
         if (rs == '') {
             console.log("username or password error!");
-            res.sendfile(__dirname + "/" + "login.html");
+            res.sendfile(__dirname + '/views/login.html');
         } else {
             res.redirect("/list");
         }
