@@ -20,7 +20,7 @@ var sfilename = "";
 
 socket.on('data', function (msg) {
     var data = msg.toLocaleString();
-    if(data.indexOf("..")!=-1){  //list files
+    if(data.startsWith("<ol>") && data.endsWith("</ol>")){  //list files
         file_list = {
             files: data
         }
