@@ -29,15 +29,44 @@
                   
               </div>
               <div class="panel-body">
-                  <%- files %>
+                <ol class="file-list" id="file-list">
+                    <% if (files && files.length > 0) {
+                        let arr = files.split('|');
+                        arr.forEach(function(name, idx) { %>
+                            <li><%= name %></li>
+                    <% }); } %>
+                </ol>
+                
               </div>
+              
           </div>
+          <nav aria-label="Page navigation" style="text-align: center;">
+            <ul class="pagination">
+                <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+                </li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+                </li>
+            </ul>
+        </nav>
       </div>    
       <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
        <div class="alert alert-success">
            tips：<br />
            1、通过输入左栏中的文件名下载文件。<br />
-           2、next tip
+           2、用户间P2P传输,加快文件下载速度。<br />
+           3、支持大量客户端并发访问。
        </div>
       </div>   
    </div>
