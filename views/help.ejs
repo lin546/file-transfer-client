@@ -37,7 +37,6 @@
     <ul class="nav nav-tabs help-category-tabs" id="help-tabs">
         <li class="active"><a href="#newbie" data-toggle="tab">新手入门</a></li>
         <li><a href="#upload" data-toggle="tab">上传下载问题</a></li>
-        <li><a href="#share" data-toggle="tab">共享权限问题</a></li>
         <li><a href="#security" data-toggle="tab">账号安全问题</a></li>
     </ul>
     <div class="tab-content help-content" id="help-content">
@@ -51,12 +50,6 @@
             <img src="/public/tutorial-upload.png" class="tutorial-img" alt="上传下载问题图示">
             <p>遇到上传失败、下载速度慢等问题？请参考本教程进行排查和优化。</p>
             <video class="tutorial-video" controls src="/public/tutorial-upload.mp4"></video>
-        </div>
-        <div class="tab-pane fade" id="share">
-            <h4>共享权限问题</h4>
-            <img src="/public/tutorial-share.png" class="tutorial-img" alt="共享权限问题图示">
-            <p>如何设置文件共享权限？如何邀请他人访问你的文件？本教程为你详细解答。</p>
-            <video class="tutorial-video" controls src="/public/tutorial-share.mp4"></video>
         </div>
         <div class="tab-pane fade" id="security">
             <h4>账号安全问题</h4>
@@ -73,7 +66,6 @@
 const tutorials = [
     { category: '新手入门', title: '平台注册与登录', content: '欢迎使用快传云！本教程将带你快速了解平台的基本操作，包括注册、登录、上传和下载文件。', img: '/public/tutorial-newbie.png', video: '/public/tutorial-newbie.mp4' },
     { category: '上传下载问题', title: '上传失败排查', content: '遇到上传失败、下载速度慢等问题？请参考本教程进行排查和优化。', img: '/public/tutorial-upload.png', video: '/public/tutorial-upload.mp4' },
-    { category: '共享权限问题', title: '设置文件共享权限', content: '如何设置文件共享权限？如何邀请他人访问你的文件？本教程为你详细解答。', img: '/public/tutorial-share.png', video: '/public/tutorial-share.mp4' },
     { category: '账号安全问题', title: '账号安全设置', content: '账号被盗、密码找回、二次验证等安全问题解决方案。', img: '/public/tutorial-security.png', video: '/public/tutorial-security.mp4' },
 ];
 function renderHelp(category, keyword='') {
