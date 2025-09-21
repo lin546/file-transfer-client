@@ -51,6 +51,22 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+app.get('/index-page', function (req, res) {
+    res.render("index", file_list); 
+});
+
+app.get('/upload-page', function (req, res) {
+    res.render('upload', { files: '' });
+});
+
+app.get('/manage-page', function (req, res) {
+    res.redirect("/list");
+});
+
+app.get('/help-page', function (req, res) {
+    res.render('help', { files: '' });
+});
+
 app.get('/register', function (req, res) {
     var name = req.query.name;
     var pwd = req.query.pwd;
@@ -77,13 +93,20 @@ app.get('/login', function (req, res) {
             console.log("username or password error!");
             res.sendfile(__dirname + '/views/login.html');
         } else {
-            res.redirect("/list");
+            res.redirect("/index");
         }
     })
 })
 
-
 app.get('/list', function (req, res) {
+    socket.write("list");
+    setTimeout(() => {
+        res.render("manage", file_list); 
+    }, 1000);
+    
+})
+
+app.get('/index', function (req, res) {
 
     socket.write("list");
     setTimeout(() => {
@@ -104,39 +127,31 @@ app.get('/download', function (req, res) {
 
 
 app.get('/upload', function (req, res) {
-
     socket.write("upload");
-               
     var file = req.query.file;
+    
+    // 只取文件名，拼接到files目录
     var s = file.split("\\");
     var filename = s[s.length-1];
-
+    var filePath = path.join(__dirname, 'files', filename);
     socket.write(filename);
 
     var buf = new Buffer.alloc(4096);
-
-    var fd = fs.openSync(file, 'r+');
-    
+    var fd = fs.openSync(filePath, 'r');
     var sendSize = 0;
     var packSize = 4096;
-
-    let fileInfo = fs.statSync(file);
+    let fileInfo = fs.statSync(filePath);
     let fileSize = fileInfo.size;
-    
     setTimeout(function () {
         while (sendSize < fileSize) {
             let size = fs.readSync(fd, buf, 0, buf.length, sendSize);
             var data = buf.toString(undefined,0,size);
             console.log(data+"\n");
-            console.log(data.length+"\n");
-
             socket.write(data);
-            
             sendSize += packSize;
-        }    
+        }
     },1000);
-    
-})
+});
 
 var server = app.listen(8080, function () {
     console.log("server start");

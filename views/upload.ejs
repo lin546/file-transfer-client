@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>快传云文件共享平台 - 文件上传页</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #aaa;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            cursor: pointer;
+            background: #f9f9f9;
+        }
+        .upload-area.dragover {
+            background: #e0f7fa;
+            border-color: #00bcd4;
+            color: #00bcd4;
+        }
+        .file-info { margin-bottom: 10px; }
+        .btn-group { margin-top: 20px; }
+        footer { margin-top: 40px; text-align: center; color: #888; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">快传云文件共享平台</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="index-page">首页</a></li>
+      <li class="active"><a href="/upload-page">文件上传页</a></li>
+      <li><a href="/manage-page">文件管理页</a></li>
+      <li><a href="/help-page">帮助中心</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+    <h2 class="text-center">文件上传页</h2>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div id="upload-area" class="upload-area">
+                <span class="glyphicon glyphicon-cloud-upload" style="font-size:2em;"></span><br>
+                <label for="file-input" style="color:#337ab7;cursor:pointer;">点击选择文件</label>
+                <input id="file-input" type="file" multiple style="display:none;">
+            </div>
+            <div class="btn-group" id="after-upload-btns" style="display:none;">
+                <form role="form" action="http://localhost:8080/upload">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="upload-btn" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-default">上传</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <a href="/help-page">上传常见问题</a>
+</footer>
+<script>
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const afterUploadBtns = document.getElementById('after-upload-btns');
+    let files = [];
+
+    function formatSize(size) {
+        if(size < 1024) return size + ' B';
+        if(size < 1024*1024) return (size/1024).toFixed(1) + ' KB';
+        return (size/1024/1024).toFixed(1) + ' MB';
+    }
+
+    function validateFile(file) {
+        const allowed = ['.jpg','.png','.txt','.pdf','.doc','.docx','.xls','.xlsx','.zip','.rar','.mp4','.mp3','.html'];
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        if(!allowed.includes(ext)) return '不支持的文件格式';
+        if(file.size > 100*1024*1024) return '文件过大(最大100MB)';
+        return '';
+    }
+
+    function renderFileList() {
+        // 获取所有文件名并拼接
+        let fileNames = files.map(file => file.name).join(', ');
+        // 渲染到 input 框
+        const uploadInput = document.getElementById('upload-btn');
+        if (uploadInput) {
+            uploadInput.value = fileNames;
+        }
+    }
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', e => {
+        files = Array.from(e.target.files);
+        renderFileList();
+       afterUploadBtns.style.display = 'block';
+    });
+
+</script>
+</body>
+</html>

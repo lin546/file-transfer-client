@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>快传云文件共享平台 - 文件管理页</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        ol.file-list > li:nth-child(odd) { background: #f9f9f9; }
+        ol.file-list > li:nth-child(even) { background: #e0e0e0; }
+        .pagination { margin: 0; }
+        .feature-box { margin-bottom: 30px; }
+        .feature-title { font-size: 1.3em; font-weight: bold; }
+        footer { margin-top: 40px; text-align: center; color: #888; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">快传云文件共享平台</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/index-page">首页</a></li>
+      <li><a href="/upload-page">文件上传页</a></li>
+      <li class="active"><a href="/manage-page">文件管理页</a></li>
+      <li><a href="/help-page">帮助中心</a></li>
+    </ul>
+   </div>
+</nav>
+<div class="container">
+    <h2 class="text-center">文件管理页</h2>
+    <div class="row">
+        <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            文件列表
+                            <a style="float: right;" href="/list">刷新</a>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <ol class="file-list" id="file-list">
+                            <% if (files && files.length > 0) {
+                                let arr = files.split('|');
+                                arr.forEach(function(name, idx) { %>
+                                    <li><%= name %></li>
+                            <% }); } %>
+                        </ol>
+                        <nav aria-label="Page navigation" style="text-align: center;">
+                            <ul class="pagination" id="file-pagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+           <form role="form" action="http://localhost:8080/download">
+              <div class="form-group">
+                <label for="filename">文件下载</label>
+                <input type="text" class="form-control" id="filename" name = "filename" placeholder="请输入文件名">
+              </div>
+              <button type="submit" class="btn btn-default">下载</button>
+           </form>
+      </div>   
+</div>
+
+<footer>
+    文件存储容量说明：每个用户享有10GB免费空间，超出部分请联系客服扩容。
+</footer>
+<script>
+ // 简单分页，每页显示 10 个文件
+    const pageSize = 10;
+    window.onload = function() {
+        const fileList = document.querySelectorAll('#file-list li');
+        const total = fileList.length;
+        const pageCount = Math.ceil(total / pageSize);
+        const pagination = document.getElementById('file-pagination');
+        let currentPage = 1;
+
+        function showPage(page) {
+            fileList.forEach((li, idx) => {
+                li.style.display = (idx >= (page-1)*pageSize && idx < page*pageSize) ? '' : 'none';
+            });
+        }
+
+        function renderPagination() {
+            pagination.innerHTML = '';
+            for(let i=1; i<=pageCount; i++) {
+                const li = document.createElement('li');
+                li.className = (i === currentPage) ? 'active' : '';
+                const a = document.createElement('a');
+                a.href = 'javascript:void(0)';
+                a.innerText = i;
+                a.onclick = function() {
+                    currentPage = i;
+                    showPage(currentPage);
+                    renderPagination();
+                };
+                li.appendChild(a);
+                pagination.appendChild(li);
+            }
+        }
+
+        if(total > 0) {
+            showPage(currentPage);
+            renderPagination();
+        }
+    }
+</script>
+</body>
+</html>

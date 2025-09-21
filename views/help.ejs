@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>快传云文件共享平台 - 帮助中心</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .help-category-tabs { margin-bottom: 20px; }
+        .help-content { margin-top: 20px; }
+        .search-bar { margin-bottom: 15px; }
+        .tutorial-img { max-width: 100%; height: auto; margin-bottom: 10px; }
+        .tutorial-video { width: 100%; height: 240px; margin-bottom: 10px; }
+        footer { margin-top: 40px; text-align: center; color: #888; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">快传云文件共享平台</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/index-page">首页</a></li>
+      <li><a href="/upload-page">文件上传页</a></li>
+      <li><a href="/manage-page">文件管理页</a></li>
+      <li class="active"><a href="/help-page">帮助中心</a></li>
+    </ul>
+    <a href="https://community.example.com" class="btn btn-link navbar-btn navbar-right" target="_blank">社区支持</a>
+  </div>
+</nav>
+<div class="container">
+    <h2 class="text-center">帮助中心</h2>
+    <div class="search-bar">
+        <input type="text" class="form-control" id="search-input" placeholder="输入关键词搜索教程..." style="width:300px;display:inline-block;">
+    </div>
+    <ul class="nav nav-tabs help-category-tabs" id="help-tabs">
+        <li class="active"><a href="#newbie" data-toggle="tab">新手入门</a></li>
+        <li><a href="#upload" data-toggle="tab">上传下载问题</a></li>
+        <li><a href="#share" data-toggle="tab">共享权限问题</a></li>
+        <li><a href="#security" data-toggle="tab">账号安全问题</a></li>
+    </ul>
+    <div class="tab-content help-content" id="help-content">
+        <div class="tab-pane fade in active" id="newbie">
+            <h4>新手入门</h4>
+            <p>欢迎使用快传云！本教程将带你快速了解平台的基本操作，包括注册、登录、上传和下载文件。</p>
+            <video class="tutorial-video" controls src="/public/tutorial-newbie.mp4"></video>
+        </div>
+        <div class="tab-pane fade" id="upload">
+            <h4>上传下载问题</h4>
+            <img src="/public/tutorial-upload.png" class="tutorial-img" alt="上传下载问题图示">
+            <p>遇到上传失败、下载速度慢等问题？请参考本教程进行排查和优化。</p>
+            <video class="tutorial-video" controls src="/public/tutorial-upload.mp4"></video>
+        </div>
+        <div class="tab-pane fade" id="share">
+            <h4>共享权限问题</h4>
+            <img src="/public/tutorial-share.png" class="tutorial-img" alt="共享权限问题图示">
+            <p>如何设置文件共享权限？如何邀请他人访问你的文件？本教程为你详细解答。</p>
+            <video class="tutorial-video" controls src="/public/tutorial-share.mp4"></video>
+        </div>
+        <div class="tab-pane fade" id="security">
+            <h4>账号安全问题</h4>
+            <img src="/public/tutorial-security.png" class="tutorial-img" alt="账号安全问题图示">
+            <p>账号被盗、密码找回、二次验证等安全问题解决方案。</p>
+            <video class="tutorial-video" controls src="/public/tutorial-security.mp4"></video>
+        </div>
+    </div>
+</div>
+<footer>
+    客服在线时间：周一至周五 9:00-18:00
+</footer>
+<script>
+const tutorials = [
+    { category: '新手入门', title: '平台注册与登录', content: '欢迎使用快传云！本教程将带你快速了解平台的基本操作，包括注册、登录、上传和下载文件。', img: '/public/tutorial-newbie.png', video: '/public/tutorial-newbie.mp4' },
+    { category: '上传下载问题', title: '上传失败排查', content: '遇到上传失败、下载速度慢等问题？请参考本教程进行排查和优化。', img: '/public/tutorial-upload.png', video: '/public/tutorial-upload.mp4' },
+    { category: '共享权限问题', title: '设置文件共享权限', content: '如何设置文件共享权限？如何邀请他人访问你的文件？本教程为你详细解答。', img: '/public/tutorial-share.png', video: '/public/tutorial-share.mp4' },
+    { category: '账号安全问题', title: '账号安全设置', content: '账号被盗、密码找回、二次验证等安全问题解决方案。', img: '/public/tutorial-security.png', video: '/public/tutorial-security.mp4' },
+];
+function renderHelp(category, keyword='') {
+    const tabPane = document.querySelector(`#help-content .tab-pane#${category}`);
+    if(!tabPane) return;
+    let html = '';
+    tutorials.filter(t => t.category === tabPane.querySelector('h4').innerText && (!keyword || t.title.includes(keyword) || t.content.includes(keyword))).forEach(t => {
+        html += `<h4>${t.title}</h4><img src='${t.img}' class='tutorial-img'><p>${t.content}</p><video class='tutorial-video' controls src='${t.video}'></video>`;
+    });
+    tabPane.innerHTML = html || '<p>未找到相关教程。</p>';
+}
+document.getElementById('help-tabs').addEventListener('click', function(e) {
+    if(e.target.tagName==='A') {
+        const href = e.target.getAttribute('href').replace('#','');
+        setTimeout(()=>{
+            renderHelp(href, document.getElementById('search-input').value);
+        }, 100);
+    }
+});
+document.getElementById('search-input').addEventListener('input', function() {
+    const activeTab = document.querySelector('#help-tabs li.active a').getAttribute('href').replace('#','');
+    renderHelp(activeTab, this.value);
+});
+</script>
+</body>
+</html>
